@@ -1,0 +1,81 @@
+[package]
+name = "win-bt-stereo-vs-handsfree"
+version = "0.1.0"
+edition = "2021"
+authors = ["Z-M-Huang"]
+license = "MIT"
+description = "Windows Bluetooth Audio Mode Manager - Monitor stereo vs hands-free modes"
+repository = "https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree"
+
+[[bin]]
+name = "win_bt_stereo_vs_handsfree"
+path = "src/main.rs"
+
+[lib]
+name = "win_bt_stereo_vs_handsfree"
+path = "src/lib.rs"
+
+[dependencies]
+# Windows API bindings
+windows = { version = "0.58", features = [
+    "Win32_Foundation",
+    "Win32_Media_Audio",
+    "Win32_Media_Audio_Endpoints",
+    "Win32_System_Com",
+    "Win32_System_Com_StructuredStorage",
+    "Win32_System_Console",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+    "Win32_Security",
+    "Win32_UI_Shell",
+    "Win32_UI_Shell_PropertiesSystem",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_Devices_FunctionDiscovery",
+    "Devices_Bluetooth",
+    "UI_Notifications",
+    "Data_Xml_Dom",
+] }
+
+# Tray icon and menus (use matching muda version)
+tray-icon = "0.17"
+muda = "0.14"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# Logging
+log = "0.4"
+simplelog = "0.12"
+
+# HTTP client for updates
+ureq = { version = "2.10", features = ["tls"] }
+semver = "1.0"
+
+# Hashing for checksum verification
+sha2 = "0.10"
+hex = "0.4"
+
+# Image loading for icons
+image = { version = "0.25", default-features = false, features = ["ico"] }
+
+# GUI for settings window
+native-windows-gui = { version = "1.0", features = ["all"] }
+
+[features]
+default = []
+test-mocks = []  # Enable mock implementations for integration tests
+
+[build-dependencies]
+embed-resource = "2.4"
+
+[dev-dependencies]
+win-bt-stereo-vs-handsfree = { path = ".", features = ["test-mocks"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+opt-level = "z"

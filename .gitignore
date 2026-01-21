@@ -1,0 +1,29 @@
+.claude/settings.local.json
+.task
+
+# Rust
+/target
+Cargo.lock
+**/*.rs.bk
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Config (don't commit user configs)
+config.toml
+
+# Build artifacts
+*.pdb
+*.exe.manifest
