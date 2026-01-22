@@ -70,7 +70,7 @@ impl MenuBuilder {
     ///
     /// # Arguments
     /// * `mode` - Current audio mode
-    /// * `hfp_apps` - Apps using HFP
+    /// * `hfp_apps` - Apps outputting to Bluetooth (may have triggered HFP)
     /// * `devices` - Bluetooth audio devices
     /// * `forced_stereo_devices` - Set of device names that have been forced to stereo mode
     pub fn build(
@@ -88,13 +88,9 @@ impl MenuBuilder {
         let mode_item = MenuItem::with_id(MENU_ID_MODE_DISPLAY, &mode_text, false, None);
         menu.append(&mode_item)?;
 
-        // Track if we added any content sections
-        let mut has_content = false;
-
         // Bluetooth devices (shown directly in main menu)
         if !devices.is_empty() {
             menu.append(&PredefinedMenuItem::separator())?;
-            has_content = true;
 
             for device in devices {
                 // Create submenu for each device directly in main menu
@@ -137,16 +133,14 @@ impl MenuBuilder {
             }
         }
 
-        // Apps using HFP submenu (only shown when in HFP mode and apps detected)
-        if mode == AudioMode::HandsFree && !hfp_apps.is_empty() {
-            if !has_content {
-                menu.append(&PredefinedMenuItem::separator())?;
-            }
+        // Apps using Bluetooth audio (shown regardless of mode when apps are detected)
+        if !hfp_apps.is_empty() {
+            menu.append(&PredefinedMenuItem::separator())?;
 
-            let apps_submenu = Submenu::new(
-                rust_i18n::t!("menu_apps_using_hfp", count = hfp_apps.len()),
-                true,
-            );
+            // Show header with count
+            let header_text = rust_i18n::t!("menu_apps_using_hfp", count = hfp_apps.len());
+            let header_item = MenuItem::with_id("apps_header", &header_text, false, None);
+            menu.append(&header_item)?;
 
             for app in hfp_apps {
                 // Create submenu for each app with terminate option
@@ -173,10 +167,8 @@ impl MenuBuilder {
                     MenuItemPurpose::TerminateApp(app.process_id),
                 );
 
-                apps_submenu.append(&app_submenu)?;
+                menu.append(&app_submenu)?;
             }
-
-            menu.append(&apps_submenu)?;
         }
 
         menu.append(&PredefinedMenuItem::separator())?;
