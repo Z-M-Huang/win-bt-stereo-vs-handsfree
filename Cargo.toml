@@ -1,6 +1,6 @@
 [package]
 name = "win-bt-stereo-vs-handsfree"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["Z-M-Huang"]
 license = "MIT"
@@ -32,6 +32,7 @@ windows = { version = "0.58", features = [
     "Win32_UI_WindowsAndMessaging",
     "Win32_System_Diagnostics_ToolHelp",
     "Win32_Devices_FunctionDiscovery",
+    "Win32_Devices_Bluetooth",
     "Devices_Bluetooth",
     "UI_Notifications",
     "Data_Xml_Dom",

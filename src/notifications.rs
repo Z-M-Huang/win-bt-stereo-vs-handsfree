@@ -140,6 +140,7 @@ pub enum NotificationType {
 }
 
 /// Manages Windows notifications
+#[derive(Clone)]
 pub struct NotificationManager {
     enabled: bool,
     notify_mode_change: bool,

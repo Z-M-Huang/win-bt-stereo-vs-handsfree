@@ -8,8 +8,8 @@
 
 // Version information
 1 VERSIONINFO
-FILEVERSION     0,1,0,0
-PRODUCTVERSION  0,1,0,0
+FILEVERSION     0,2,0,0
+PRODUCTVERSION  0,2,0,0
 FILEFLAGSMASK   0x3fL
 FILEFLAGS       0x0L
 FILEOS          0x40004L
@@ -22,12 +22,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Mark.Huang (Z-M-Huang)"
             VALUE "FileDescription", "Bluetooth Audio Mode Manager"
-            VALUE "FileVersion", "0.1.0"
+            VALUE "FileVersion", "0.2.0"
             VALUE "InternalName", "win_bt_stereo_vs_handsfree"
             VALUE "LegalCopyright", "Copyright (c) 2026 Mark.Huang (Z-M-Huang)"
             VALUE "OriginalFilename", "win_bt_stereo_vs_handsfree.exe"
             VALUE "ProductName", "Bluetooth Audio Mode Manager"
-            VALUE "ProductVersion", "0.1.0"
+            VALUE "ProductVersion", "0.2.0"
         END
     END
     BLOCK "VarFileInfo"

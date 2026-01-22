@@ -3,6 +3,7 @@
 //! A Windows application for managing Bluetooth audio device modes (stereo vs hands-free).
 
 pub mod audio;
+pub mod bluetooth;
 pub mod error;
 pub mod logging;
 pub mod notifications;

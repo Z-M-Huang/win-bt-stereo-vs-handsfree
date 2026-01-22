@@ -5,6 +5,7 @@
 #![windows_subsystem = "windows"]
 
 use win_bt_stereo_vs_handsfree::audio::{AudioMode, AudioMonitor, MonitorEvent, get_apps_using_bluetooth_output};
+use win_bt_stereo_vs_handsfree::bluetooth;
 use win_bt_stereo_vs_handsfree::error::{AppError, ErrorSeverity, Result};
 use win_bt_stereo_vs_handsfree::logging::{init_logging, parse_log_level, LoggingConfig};
 use win_bt_stereo_vs_handsfree::notifications::{register_aumid, NotificationManager, NotificationType};
@@ -14,6 +15,7 @@ use win_bt_stereo_vs_handsfree::tray::{MenuBuilder, MenuEvent, TrayIconManager};
 use win_bt_stereo_vs_handsfree::update::UpdateChecker;
 use log::{error, info, warn};
 use muda::MenuEvent as MudaMenuEvent;
+use std::collections::HashSet;
 use std::ffi::OsStr;
 use std::os::windows::ffi::OsStrExt;
 use std::sync::{Arc, Mutex};
@@ -47,6 +49,30 @@ unsafe extern "system" fn console_ctrl_handler(ctrl_type: u32) -> BOOL {
     }
 }
 
+/// RAII guard to ensure device is removed from reconnecting set even on panic
+struct ReconnectGuard {
+    device_name: String,
+    reconnecting_devices: Arc<Mutex<HashSet<String>>>,
+}
+
+impl ReconnectGuard {
+    fn new(device_name: &str, reconnecting_devices: Arc<Mutex<HashSet<String>>>) -> Self {
+        Self {
+            device_name: device_name.to_string(),
+            reconnecting_devices,
+        }
+    }
+}
+
+impl Drop for ReconnectGuard {
+    fn drop(&mut self) {
+        // Remove device from reconnecting set
+        if let Ok(mut reconnecting) = self.reconnecting_devices.lock() {
+            reconnecting.remove(&self.device_name);
+        }
+    }
+}
+
 /// Main application state
 struct App {
     config_manager: ConfigManager,
@@ -59,6 +85,9 @@ struct App {
     update_checker: UpdateChecker,
     settings_window: win_bt_stereo_vs_handsfree::settings::SettingsWindow,
     mic_apps: Arc<Mutex<Vec<win_bt_stereo_vs_handsfree::audio::MicUsingApp>>>,
+    reconnecting_devices: Arc<Mutex<HashSet<String>>>,
+    /// Devices that have been forced to stereo mode (HFP disabled)
+    forced_stereo_devices: HashSet<String>,
     running: bool,
     last_update_check: Instant,
 }
@@ -86,6 +115,8 @@ impl App {
             update_checker,
             settings_window: win_bt_stereo_vs_handsfree::settings::SettingsWindow::new(),
             mic_apps,
+            reconnecting_devices: Arc::new(Mutex::new(HashSet::new())),
+            forced_stereo_devices: HashSet::new(),
             running: true,
             last_update_check: Instant::now(),
         })
@@ -106,6 +137,7 @@ impl App {
             AudioMode::Unknown,
             &[],
             &[],
+            &self.forced_stereo_devices,
         )?;
 
         // Create tray icon
@@ -146,7 +178,7 @@ impl App {
                             tray.update_mode(mode)?;
 
                             // Rebuild menu with HFP apps (not mic apps)
-                            let menu = self.menu_builder.build(mode, &hfp_apps, &devices)?;
+                            let menu = self.menu_builder.build(mode, &hfp_apps, &devices, &self.forced_stereo_devices)?;
                             tray.update_menu(menu)?;
                         }
                     }
@@ -180,6 +212,105 @@ impl App {
                             severity: ErrorSeverity::Recoverable,
                         })?;
                     }
+                }
+                MenuEvent::ForceStereo(device_name) => {
+                    info!("Force stereo requested for: {}", device_name);
+
+                    // Force stereo is quick - just disable HFP service
+                    match bluetooth::disable_hfp_by_name(&device_name) {
+                        Ok(_) => {
+                            // Track that this device has been forced to stereo
+                            self.forced_stereo_devices.insert(device_name.clone());
+                            self.notification_manager.show(NotificationType::Info {
+                                title: "Stereo Mode".to_string(),
+                                message: format!("{} switched to stereo mode", device_name),
+                            })?;
+                        }
+                        Err(e) => {
+                            error!("Failed to force stereo for {}: {}", device_name, e);
+                            self.notification_manager.show(NotificationType::Error {
+                                message: format!("Failed to switch to stereo: {}", e),
+                                severity: ErrorSeverity::Recoverable,
+                            })?;
+                        }
+                    }
+                }
+                MenuEvent::AllowHandsFree(device_name) => {
+                    info!("Allow hands-free requested for: {}", device_name);
+
+                    // Re-enable HFP service
+                    match bluetooth::enable_hfp_by_name(&device_name) {
+                        Ok(_) => {
+                            // Remove from forced stereo tracking
+                            self.forced_stereo_devices.remove(&device_name);
+                            self.notification_manager.show(NotificationType::Info {
+                                title: "Hands-Free Enabled".to_string(),
+                                message: format!("{} hands-free mode enabled", device_name),
+                            })?;
+                        }
+                        Err(e) => {
+                            error!("Failed to enable hands-free for {}: {}", device_name, e);
+                            self.notification_manager.show(NotificationType::Error {
+                                message: format!("Failed to enable hands-free: {}", e),
+                                severity: ErrorSeverity::Recoverable,
+                            })?;
+                        }
+                    }
+                }
+                MenuEvent::ReconnectDevice(device_name) => {
+                    info!("Reconnect requested for: {}", device_name);
+
+                    // Check if device is already reconnecting
+                    {
+                        let reconnecting = self.reconnecting_devices.lock().unwrap();
+                        if reconnecting.contains(&device_name) {
+                            self.notification_manager.show(NotificationType::Info {
+                                title: "Already Reconnecting".to_string(),
+                                message: format!("{} is already reconnecting", device_name),
+                            })?;
+                            return Ok(());
+                        }
+                    }
+
+                    // Show reconnecting notification
+                    self.notification_manager.show(NotificationType::Info {
+                        title: "Reconnecting...".to_string(),
+                        message: format!("Reconnecting {}", device_name),
+                    })?;
+
+                    // Spawn background thread for reconnect
+                    let name = device_name.clone();
+                    let reconnecting_devices = Arc::clone(&self.reconnecting_devices);
+                    let notification_manager = self.notification_manager.clone();
+
+                    std::thread::spawn(move || {
+                        // Use guard to ensure device is removed from set even on panic
+                        let _guard = ReconnectGuard::new(&name, Arc::clone(&reconnecting_devices));
+
+                        // Add device to reconnecting set
+                        {
+                            let mut reconnecting = reconnecting_devices.lock().unwrap();
+                            reconnecting.insert(name.clone());
+                        }
+
+                        // Perform reconnect
+                        match bluetooth::reconnect_by_name(&name) {
+                            Ok(_) => {
+                                info!("Successfully reconnected {}", name);
+                                let _ = notification_manager.show(NotificationType::Info {
+                                    title: "Reconnected".to_string(),
+                                    message: format!("Successfully reconnected {}", name),
+                                });
+                            }
+                            Err(e) => {
+                                error!("Failed to reconnect {}: {}", name, e);
+                                let _ = notification_manager.show(NotificationType::Error {
+                                    message: format!("Failed to reconnect {}: {}", name, e),
+                                    severity: ErrorSeverity::Recoverable,
+                                });
+                            }
+                        }
+                    });
                 }
                 MenuEvent::OpenSettings => {
                     info!("Open settings requested");
