@@ -1,31 +1,78 @@
 # Bluetooth Audio Mode Manager
 
-A Windows system tray application that monitors Bluetooth headphone audio modes (stereo/A2DP vs hands-free/HFP).
+[![GitHub release](https://img.shields.io/github/v/release/Z-M-Huang/win-bt-stereo-vs-handsfree?style=flat-square)](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows%2010%2F11-blue?style=flat-square)](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/releases)
+[![Languages](https://img.shields.io/badge/languages-7-green?style=flat-square)](#supported-languages)
 
-## Problem
+A Windows system tray application that monitors and controls Bluetooth headphone audio modes (stereo/A2DP vs hands-free/HFP).
 
-Bluetooth headphones on Windows automatically switch from high-quality stereo mode (A2DP) to lower-quality hands-free mode (HFP) when any application activates the headset's microphone or initiates a call. This results in noticeably degraded audio quality.
+## Documentation / Wiki
 
-## Solution
+**For detailed user guides and tutorials, visit our [Wiki](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki):**
 
-This application monitors your Bluetooth audio devices and shows you:
+| Language | Guide |
+|----------|-------|
+| English | [User Guide](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide) |
+| 简体中文 | [用户指南](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-zh-CN) |
+| 繁體中文 | [使用指南](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-zh-TW) |
+| Español | [Guía del Usuario](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-es) |
+| Deutsch | [Benutzerhandbuch](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-de) |
+| Français | [Guide de l'Utilisateur](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-fr) |
+| 日本語 | [ユーザーガイド](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/wiki/User-Guide-ja) |
 
-- The current audio mode (Stereo or Hands-Free)
-- Which applications are causing HFP mode (when in hands-free mode)
-- Real-time mode change notifications
+## The Problem
+
+Bluetooth headphones on Windows automatically switch from **high-quality stereo mode (A2DP)** to **lower-quality hands-free mode (HFP)** when any application activates the headset's microphone. This results in noticeably degraded audio quality - music sounds muffled and low-quality.
+
+## The Solution
+
+This application helps you:
+
+- **Monitor** your Bluetooth audio mode in real-time
+- **See** which apps are causing the mode switch
+- **Force stereo mode** by disabling the hands-free service
+- **Get notified** when the audio mode changes
+
+## Quick Start
+
+### Download
+
+1. Go to [**Releases**](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/releases)
+2. Download the latest `.zip` file (e.g., `win-bt-stereo-vs-handsfree-v0.3.0-windows-x64.zip`)
+3. Extract to any folder
+
+### Run
+
+1. Double-click `win_bt_stereo_vs_handsfree.exe`
+2. The app icon appears in your **system tray** (bottom-right corner)
+3. Right-click the icon to see the menu
+
+### Keep the Icon Visible (Recommended)
+
+By default, Windows hides tray icons. To always show this app's icon:
+
+**Windows 11:**
+1. Right-click the taskbar → **Taskbar settings**
+2. Expand **Other system tray icons**
+3. Turn ON **Bluetooth Audio Mode Manager**
+
+**Windows 10:**
+1. Right-click the taskbar → **Taskbar settings**
+2. Click **Select which icons appear on the taskbar**
+3. Turn ON **Bluetooth Audio Mode Manager**
 
 ## Features
 
-- **System Tray Integration**: Runs silently in the system tray with mode-indicating icons
-- **Real-time Monitoring**: Continuously monitors audio mode via Windows Audio API
-- **HFP App Detection**: Shows which apps are outputting to your Bluetooth headset when in HFP mode
-- **Force Stereo Mode**: Disable HFP service to keep headphones in stereo mode
-- **Notifications**: Toast notifications for mode changes (appears in Windows notification center)
-- **Multi-Language Support**: UI available in 7 languages with automatic OS language detection
-- **Auto-Start**: Optional Windows startup integration
-- **Auto-Update**: Checks for updates from GitHub releases
+- **System Tray Integration** - Runs silently with mode-indicating icons
+- **Real-time Monitoring** - Continuously monitors audio mode
+- **Force Stereo Mode** - Disable HFP to keep high-quality audio
+- **HFP App Detection** - See which apps trigger hands-free mode
+- **Toast Notifications** - Get notified of mode changes
+- **Multi-Language UI** - Available in 7 languages
+- **Auto-Start** - Optional startup with Windows
+- **Auto-Update** - Checks for new versions
 
-### Supported Languages
+## Supported Languages
 
 | Language | Code |
 |----------|------|
@@ -37,56 +84,18 @@ This application monitors your Bluetooth audio devices and shows you:
 | French (Français) | fr |
 | Japanese (日本語) | ja |
 
-The application automatically detects your Windows display language. You can also manually select a language in Settings.
+The app automatically detects your Windows language. You can also manually select a language in Settings.
 
-## Download
+## System Requirements
 
-Download `win_bt_stereo_vs_handsfree.exe` and the `resources` folder from [Releases](https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree/releases).
-
-### File Structure
-
-```
-win_bt_stereo_vs_handsfree.exe
-resources/
-  ├── app.ico
-  ├── tray_stereo.ico
-  ├── tray_handsfree.ico
-  └── tray_unknown.ico
-```
-
-## Usage
-
-1. Launch `win_bt_stereo_vs_handsfree.exe` - it will appear in the system tray
-2. Right-click the tray icon to see the context menu
-3. The icon indicates the current mode:
-   - **Stereo icon**: High-quality stereo mode (A2DP)
-   - **Hands-free icon**: Lower-quality hands-free mode (HFP)
-   - **Unknown icon**: No Bluetooth audio device detected
-
-### Context Menu
-
-- **Mode: [current mode]** - Shows current audio mode
-- **[Device Name]** - Submenu for each Bluetooth device with:
-  - **Force Stereo** - Disable HFP service to keep device in stereo mode
-  - **Allow Hands Free** - Re-enable HFP service
-  - **Reconnect** - Reconnect the Bluetooth device
-- **Apps Using HFP** - Shows apps outputting to BT headset (only visible in HFP mode)
-- **Settings** - Open settings window (includes language selection)
-- **Check for Updates** - Check for new versions
-- **About** - Show version and credits
-- **Exit** - Close the application
-
-## How It Works
-
-The application uses Windows Audio APIs to detect the current Bluetooth audio profile:
-
-1. **Peak Meter Detection**: Queries `IAudioMeterInformation` to check channel count
-   - 1 channel (mono) = HFP mode
-   - 2 channels (stereo) = A2DP mode
-
-2. **Session Enumeration**: Uses WASAPI to enumerate audio sessions and identify which applications are using the Bluetooth audio device
+- Windows 10 or Windows 11
+- Bluetooth audio device (headphones, earbuds, speakers)
+- No administrator privileges required
 
 ## Building from Source
+
+<details>
+<summary>Click to expand build instructions</summary>
 
 ### Prerequisites
 
@@ -97,24 +106,19 @@ The application uses Windows Audio APIs to detect the current Bluetooth audio pr
 ### Build
 
 ```bash
-# Clone the repository
 git clone https://github.com/Z-M-Huang/win-bt-stereo-vs-handsfree.git
 cd win-bt-stereo-vs-handsfree
-
-# Build in release mode
 cargo build --release
-
-# Run tests
 cargo test
 ```
 
 The executable will be in `target/release/win_bt_stereo_vs_handsfree.exe`.
 
+</details>
+
 ## Configuration
 
 Configuration is stored in `%LOCALAPPDATA%\BtAudioModeManager\config.toml`.
-
-### Settings
 
 | Setting | Description | Default |
 |---------|-------------|---------|
@@ -124,53 +128,22 @@ Configuration is stored in `%LOCALAPPDATA%\BtAudioModeManager\config.toml`.
 | notify_mic_usage | Notify when apps use mic | true |
 | notify_errors | Show error notifications | true |
 | auto_check | Auto-check for updates | true |
-| log_level | Logging verbosity | info |
-
-## Known Limitations
-
-1. **Detection Only**: This application monitors and displays the current mode but cannot directly switch Bluetooth profiles. Windows does not expose a public API for controlling A2DP/HFP profile selection.
-
-2. **Windows 11 Unified Endpoints**: On Windows 11, Bluetooth audio endpoints are unified, making traditional sample-rate detection unreliable. This app uses peak meter channel count for accurate detection.
 
 ## Security
 
-- No admin privileges required for normal operation
+- No admin privileges required
 - Update checks verify SHA256 checksums
-- All operations are read-only monitoring
+- All operations are read-only monitoring (except Force Stereo which toggles HFP service)
 
 ## License
 
-MIT License with Attribution Requirement
+MIT License with Attribution Requirement - Copyright (c) 2026 Mark.Huang (Z-M-Huang)
 
-Copyright (c) 2026 Mark.Huang (Z-M-Huang)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-1. The above copyright notice and this permission notice shall be included in all
-   copies or substantial portions of the Software.
-
-2. **Attribution Requirement**: Any distribution of the Software or derivative works
-   must include visible attribution to the original author (Mark.Huang / Z-M-Huang) in
-   the application's About dialog, README, or equivalent documentation.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+See [LICENSE](LICENSE) for full details.
 
 ## Contributing
 
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests: `cargo test`
-5. Submit a pull request
+Contributions are welcome! Please fork the repository, create a feature branch, and submit a pull request.
 
 ## Credits
 
