@@ -56,7 +56,7 @@ log = "0.4"
 simplelog = "0.12"
 
 # HTTP client for updates
-ureq = { version = "2.10", features = ["tls"] }
+ureq = { version = "3.1", features = ["tls"] }
 semver = "1.0"
 
 # Hashing for checksum verification
