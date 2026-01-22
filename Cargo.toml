@@ -1,6 +1,6 @@
 [package]
 name = "win-bt-stereo-vs-handsfree"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["Z-M-Huang"]
 license = "MIT"
@@ -33,6 +33,7 @@ windows = { version = "0.58", features = [
     "Win32_System_Diagnostics_ToolHelp",
     "Win32_Devices_FunctionDiscovery",
     "Win32_Devices_Bluetooth",
+    "Win32_Globalization",
     "Devices_Bluetooth",
     "UI_Notifications",
     "Data_Xml_Dom",
@@ -46,6 +47,9 @@ muda = "0.17"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 toml = "0.9"
+
+# Internationalization
+rust-i18n = "3"
 
 # Logging
 log = "0.4"

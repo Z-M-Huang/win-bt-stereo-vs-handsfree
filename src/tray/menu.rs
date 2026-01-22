@@ -84,7 +84,7 @@ impl MenuBuilder {
         let menu = Menu::new();
 
         // Current mode display (disabled)
-        let mode_text = format!("Mode: {}", mode);
+        let mode_text = rust_i18n::t!("menu_mode", mode = mode.display_localized());
         let mode_item = MenuItem::with_id(MENU_ID_MODE_DISPLAY, &mode_text, false, None);
         menu.append(&mode_item)?;
 
@@ -98,7 +98,7 @@ impl MenuBuilder {
 
             for device in devices {
                 // Create submenu for each device directly in main menu
-                let device_text = format!("{} ({})", device.device.name, device.current_mode);
+                let device_text = format!("{} ({})", device.device.name, device.current_mode.display_localized());
                 let device_submenu = Submenu::new(&device_text, true);
 
                 // Check if this device has been forced to stereo
@@ -106,7 +106,7 @@ impl MenuBuilder {
 
                 // Add Force Stereo option (enabled when HFP is allowed)
                 let force_stereo_id = format!("{}{}", MENU_PREFIX_FORCE_STEREO, &device.device.name);
-                let force_stereo_item = MenuItem::with_id(&force_stereo_id, "Force Stereo", !is_forced_stereo, None);
+                let force_stereo_item = MenuItem::with_id(&force_stereo_id, &rust_i18n::t!("menu_force_stereo"), !is_forced_stereo, None);
                 device_submenu.append(&force_stereo_item)?;
                 self.item_map.insert(
                     force_stereo_id,
@@ -115,7 +115,7 @@ impl MenuBuilder {
 
                 // Add Allow Hands Free option (enabled when forced to stereo)
                 let allow_hfp_id = format!("{}{}", MENU_PREFIX_ALLOW_HFP, &device.device.name);
-                let allow_hfp_item = MenuItem::with_id(&allow_hfp_id, "Allow Hands Free", is_forced_stereo, None);
+                let allow_hfp_item = MenuItem::with_id(&allow_hfp_id, &rust_i18n::t!("menu_allow_hands_free"), is_forced_stereo, None);
                 device_submenu.append(&allow_hfp_item)?;
                 self.item_map.insert(
                     allow_hfp_id,
@@ -126,7 +126,7 @@ impl MenuBuilder {
 
                 // Add Reconnect option (full reconnect)
                 let reconnect_id = format!("{}{}", MENU_PREFIX_RECONNECT, &device.device.name);
-                let reconnect_item = MenuItem::with_id(&reconnect_id, "Reconnect", true, None);
+                let reconnect_item = MenuItem::with_id(&reconnect_id, &rust_i18n::t!("menu_reconnect"), true, None);
                 device_submenu.append(&reconnect_item)?;
                 self.item_map.insert(
                     reconnect_id,
@@ -144,7 +144,7 @@ impl MenuBuilder {
             }
 
             let apps_submenu = Submenu::new(
-                format!("Apps Using HFP ({})", hfp_apps.len()),
+                rust_i18n::t!("menu_apps_using_hfp", count = hfp_apps.len()),
                 true,
             );
 
@@ -153,7 +153,7 @@ impl MenuBuilder {
                 let app_submenu = Submenu::new(&app.display_name, true);
 
                 // Process info (disabled)
-                let info_text = format!("PID: {} - {}", app.process_id, app.process_name);
+                let info_text = rust_i18n::t!("menu_pid_info", pid = app.process_id, name = &app.process_name);
                 let info_item = MenuItem::with_id(
                     &format!("info_{}", app.process_id),
                     &info_text,
@@ -166,7 +166,7 @@ impl MenuBuilder {
 
                 // Terminate option
                 let terminate_id = format!("{}{}", MENU_PREFIX_TERMINATE_APP, app.process_id);
-                let terminate_item = MenuItem::with_id(&terminate_id, "Terminate App", true, None);
+                let terminate_item = MenuItem::with_id(&terminate_id, &rust_i18n::t!("menu_terminate_app"), true, None);
                 app_submenu.append(&terminate_item)?;
                 self.item_map.insert(
                     terminate_id,
@@ -182,17 +182,17 @@ impl MenuBuilder {
         menu.append(&PredefinedMenuItem::separator())?;
 
         // Settings
-        let settings_item = MenuItem::with_id(MENU_ID_SETTINGS, "Settings...", true, None);
+        let settings_item = MenuItem::with_id(MENU_ID_SETTINGS, &rust_i18n::t!("menu_settings"), true, None);
         menu.append(&settings_item)?;
 
         // Check for updates
-        let updates_item = MenuItem::with_id(MENU_ID_CHECK_UPDATES, "Check for Updates", true, None);
+        let updates_item = MenuItem::with_id(MENU_ID_CHECK_UPDATES, &rust_i18n::t!("menu_check_updates"), true, None);
         menu.append(&updates_item)?;
 
         menu.append(&PredefinedMenuItem::separator())?;
 
         // Exit
-        let exit_item = MenuItem::with_id(MENU_ID_EXIT, "Exit", true, None);
+        let exit_item = MenuItem::with_id(MENU_ID_EXIT, &rust_i18n::t!("menu_exit"), true, None);
         menu.append(&exit_item)?;
 
         Ok(menu)

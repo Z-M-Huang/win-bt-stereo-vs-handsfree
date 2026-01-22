@@ -4,6 +4,9 @@
 
 #![windows_subsystem = "windows"]
 
+// Initialize i18n for the binary (shares locales with library)
+rust_i18n::i18n!("locales", fallback = "en");
+
 use win_bt_stereo_vs_handsfree::audio::{AudioMode, AudioMonitor, MonitorEvent, get_apps_using_bluetooth_output};
 use win_bt_stereo_vs_handsfree::bluetooth;
 use win_bt_stereo_vs_handsfree::error::{AppError, ErrorSeverity, Result};
@@ -222,14 +225,14 @@ impl App {
                             // Track that this device has been forced to stereo
                             self.forced_stereo_devices.insert(device_name.clone());
                             self.notification_manager.show(NotificationType::Info {
-                                title: "Stereo Mode".to_string(),
-                                message: format!("{} switched to stereo mode", device_name),
+                                title: rust_i18n::t!("notify_stereo_mode").to_string(),
+                                message: rust_i18n::t!("msg_device_stereo", device = &device_name).to_string(),
                             })?;
                         }
                         Err(e) => {
                             error!("Failed to force stereo for {}: {}", device_name, e);
                             self.notification_manager.show(NotificationType::Error {
-                                message: format!("Failed to switch to stereo: {}", e),
+                                message: rust_i18n::t!("msg_stereo_failed", error = e.to_string()).to_string(),
                                 severity: ErrorSeverity::Recoverable,
                             })?;
                         }
@@ -244,14 +247,14 @@ impl App {
                             // Remove from forced stereo tracking
                             self.forced_stereo_devices.remove(&device_name);
                             self.notification_manager.show(NotificationType::Info {
-                                title: "Hands-Free Enabled".to_string(),
-                                message: format!("{} hands-free mode enabled", device_name),
+                                title: rust_i18n::t!("notify_hands_free_enabled").to_string(),
+                                message: rust_i18n::t!("msg_device_hands_free", device = &device_name).to_string(),
                             })?;
                         }
                         Err(e) => {
                             error!("Failed to enable hands-free for {}: {}", device_name, e);
                             self.notification_manager.show(NotificationType::Error {
-                                message: format!("Failed to enable hands-free: {}", e),
+                                message: rust_i18n::t!("msg_hands_free_failed", error = e.to_string()).to_string(),
                                 severity: ErrorSeverity::Recoverable,
                             })?;
                         }
@@ -265,8 +268,8 @@ impl App {
                         let reconnecting = self.reconnecting_devices.lock().unwrap();
                         if reconnecting.contains(&device_name) {
                             self.notification_manager.show(NotificationType::Info {
-                                title: "Already Reconnecting".to_string(),
-                                message: format!("{} is already reconnecting", device_name),
+                                title: rust_i18n::t!("notify_already_reconnecting").to_string(),
+                                message: rust_i18n::t!("msg_device_already_reconnecting", device = &device_name).to_string(),
                             })?;
                             return Ok(());
                         }
@@ -274,8 +277,8 @@ impl App {
 
                     // Show reconnecting notification
                     self.notification_manager.show(NotificationType::Info {
-                        title: "Reconnecting...".to_string(),
-                        message: format!("Reconnecting {}", device_name),
+                        title: rust_i18n::t!("notify_reconnecting").to_string(),
+                        message: rust_i18n::t!("msg_device_reconnecting", device = &device_name).to_string(),
                     })?;
 
                     // Spawn background thread for reconnect
@@ -298,14 +301,14 @@ impl App {
                             Ok(_) => {
                                 info!("Successfully reconnected {}", name);
                                 let _ = notification_manager.show(NotificationType::Info {
-                                    title: "Reconnected".to_string(),
-                                    message: format!("Successfully reconnected {}", name),
+                                    title: rust_i18n::t!("notify_reconnected").to_string(),
+                                    message: rust_i18n::t!("msg_device_reconnected", device = &name).to_string(),
                                 });
                             }
                             Err(e) => {
                                 error!("Failed to reconnect {}: {}", name, e);
                                 let _ = notification_manager.show(NotificationType::Error {
-                                    message: format!("Failed to reconnect {}: {}", name, e),
+                                    message: rust_i18n::t!("msg_reconnect_failed", device = &name, error = e.to_string()).to_string(),
                                     severity: ErrorSeverity::Recoverable,
                                 });
                             }
@@ -345,15 +348,15 @@ impl App {
             Ok(None) => {
                 info!("No updates available");
                 self.notification_manager.show(NotificationType::Info {
-                    title: "Up to Date".to_string(),
-                    message: format!("You are running the latest version ({})", env!("CARGO_PKG_VERSION")),
+                    title: rust_i18n::t!("notify_up_to_date").to_string(),
+                    message: rust_i18n::t!("msg_latest_version", version = env!("CARGO_PKG_VERSION")).to_string(),
                 })?;
             }
             Err(e) => {
                 warn!("Update check failed: {}", e);
                 self.notification_manager.show(NotificationType::Info {
-                    title: "Update Check Failed".to_string(),
-                    message: format!("Could not check for updates: {}", e),
+                    title: rust_i18n::t!("notify_update_check_failed").to_string(),
+                    message: rust_i18n::t!("msg_update_check_error", error = e.to_string()).to_string(),
                 })?;
             }
         }
@@ -366,6 +369,9 @@ impl App {
         if let Some(msg) = self.settings_window.try_recv() {
             match msg {
                 win_bt_stereo_vs_handsfree::settings::window::SettingsMessage::Closed(Some(new_config)) => {
+                    // Check if language changed
+                    let language_changed = new_config.general.language != self.config.general.language;
+
                     // Handle auto-start change
                     if new_config.general.auto_start != self.config.general.auto_start {
                         self.config_manager.set_auto_start(new_config.general.auto_start)?;
@@ -382,6 +388,14 @@ impl App {
                         self.config.notifications.notify_errors,
                         self.config.notifications.notify_updates,
                     );
+
+                    // Handle language change
+                    if language_changed {
+                        // Reinitialize i18n with new language
+                        win_bt_stereo_vs_handsfree::i18n::init(self.config.general.language.as_deref());
+                        // Menu will be rebuilt with new language on next audio state update (within 500ms)
+                        info!("Language changed, i18n reinitialized");
+                    }
 
                     info!("Settings saved");
                 }
@@ -482,7 +496,7 @@ fn check_single_instance() -> Result<HANDLE> {
         if last_error.0 == 183 {
             let _ = CloseHandle(mutex);
             return Err(AppError::ConfigError(
-                "Another instance is already running".to_string(),
+                rust_i18n::t!("msg_already_running").to_string(),
             ));
         }
 
@@ -494,21 +508,21 @@ fn check_single_instance() -> Result<HANDLE> {
 fn show_about_dialog() {
     let version = env!("CARGO_PKG_VERSION");
     let message = format!(
-        "Bluetooth Audio Mode Manager\n\n\
-         Version: {}\n\n\
-         Manage your Bluetooth headphone audio modes.\n\n\
-         Created by Mark.Huang (Z-M-Huang)\n\
-         MIT License with attribution requirement",
-        version
+        "{}\n\n{}\n\n{}\n\n{}\n{}",
+        rust_i18n::t!("about_app_name"),
+        rust_i18n::t!("about_version", version = version),
+        rust_i18n::t!("about_description"),
+        rust_i18n::t!("about_author"),
+        rust_i18n::t!("about_license")
     );
 
-    let title = "About";
+    let title = rust_i18n::t!("about_title");
 
     let message_wide: Vec<u16> = OsStr::new(&message)
         .encode_wide()
         .chain(std::iter::once(0))
         .collect();
-    let title_wide: Vec<u16> = OsStr::new(title)
+    let title_wide: Vec<u16> = OsStr::new(&*title)
         .encode_wide()
         .chain(std::iter::once(0))
         .collect();
@@ -646,6 +660,9 @@ fn main() {
     if let Err(e) = init_logging(log_config) {
         eprintln!("Failed to initialize logging: {}", e);
     }
+
+    // Initialize i18n with configured or system locale
+    win_bt_stereo_vs_handsfree::i18n::init(config.general.language.as_deref());
 
     // Register console control handler for Ctrl+C
     unsafe {

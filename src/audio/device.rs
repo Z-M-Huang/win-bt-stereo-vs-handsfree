@@ -32,6 +32,20 @@ impl std::fmt::Display for AudioMode {
     }
 }
 
+impl AudioMode {
+    /// Get localized display string for UI
+    ///
+    /// This returns a localized string based on the current locale.
+    /// The Display trait implementation above returns English for logs.
+    pub fn display_localized(&self) -> String {
+        match self {
+            AudioMode::Stereo => rust_i18n::t!("mode_stereo").to_string(),
+            AudioMode::HandsFree => rust_i18n::t!("mode_hands_free").to_string(),
+            AudioMode::Unknown => rust_i18n::t!("mode_unknown").to_string(),
+        }
+    }
+}
+
 /// Information about an audio device
 #[derive(Debug, Clone)]
 pub struct AudioDevice {

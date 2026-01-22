@@ -1,0 +1,73 @@
+# Simplified Chinese translations (简体中文)
+
+# Menu Items
+menu_force_stereo = "强制立体声"
+menu_allow_hands_free = "允许免提"
+menu_reconnect = "重新连接"
+menu_settings = "设置..."
+menu_check_updates = "检查更新"
+menu_exit = "退出"
+menu_terminate_app = "终止应用"
+menu_mode = "模式: %{mode}"
+menu_apps_using_hfp = "正在使用免提的应用 (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "立体声"
+mode_hands_free = "免提"
+mode_unknown = "未知"
+
+# Notifications - Titles
+notify_audio_mode_changed = "音频模式已更改"
+notify_mic_in_use = "麦克风使用中"
+notify_mic_released = "麦克风已释放"
+notify_update_available = "有可用更新"
+notify_stereo_mode = "立体声模式"
+notify_hands_free_enabled = "免提模式已启用"
+notify_reconnecting = "正在重新连接..."
+notify_already_reconnecting = "正在重新连接中"
+notify_reconnected = "已重新连接"
+notify_up_to_date = "已是最新版本"
+notify_update_check_failed = "检查更新失败"
+notify_error = "错误"
+notify_warning = "警告"
+notify_notice = "提示"
+
+# Notifications - Messages
+msg_mode_switched = "已从 %{old} 切换到 %{new}"
+msg_mic_started = "%{app} 开始使用麦克风"
+msg_mic_stopped = "%{app} 停止使用麦克风"
+msg_update_available = "版本 %{version} 可用。查看菜单以更新。"
+msg_device_stereo = "%{device} 已切换到立体声模式"
+msg_device_hands_free = "%{device} 免提模式已启用"
+msg_device_reconnecting = "正在重新连接 %{device}"
+msg_device_already_reconnecting = "%{device} 正在重新连接中"
+msg_device_reconnected = "成功重新连接 %{device}"
+msg_reconnect_failed = "重新连接 %{device} 失败: %{error}"
+msg_stereo_failed = "切换到立体声失败: %{error}"
+msg_hands_free_failed = "启用免提失败: %{error}"
+msg_latest_version = "您正在运行最新版本 (%{version})"
+msg_update_check_error = "无法检查更新: %{error}"
+msg_terminate_failed = "无法终止进程: %{error}"
+msg_already_running = "另一个实例已在运行"
+
+# Settings Window
+settings_title = "设置"
+settings_language = "语言:"
+settings_language_system = "跟随系统"
+settings_startup = "开机自动启动"
+settings_notifications_group = "显示通知:"
+settings_notify_mode_changes = "音频模式更改"
+settings_notify_mic_usage = "麦克风使用"
+settings_notify_errors = "错误和警告"
+settings_auto_updates = "自动检查更新"
+settings_cancel = "取消"
+settings_save = "保存"
+
+# About Dialog
+about_title = "关于"
+about_app_name = "蓝牙音频模式管理器"
+about_version = "版本: %{version}"
+about_description = "管理您的蓝牙耳机音频模式。"
+about_author = "作者: Mark.Huang (Z-M-Huang)"
+about_license = "MIT许可证 (需注明出处)"

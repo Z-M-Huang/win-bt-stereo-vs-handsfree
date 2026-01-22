@@ -19,9 +19,25 @@ This application monitors your Bluetooth audio devices and shows you:
 - **System Tray Integration**: Runs silently in the system tray with mode-indicating icons
 - **Real-time Monitoring**: Continuously monitors audio mode via Windows Audio API
 - **HFP App Detection**: Shows which apps are outputting to your Bluetooth headset when in HFP mode
+- **Force Stereo Mode**: Disable HFP service to keep headphones in stereo mode
 - **Notifications**: Toast notifications for mode changes (appears in Windows notification center)
+- **Multi-Language Support**: UI available in 7 languages with automatic OS language detection
 - **Auto-Start**: Optional Windows startup integration
 - **Auto-Update**: Checks for updates from GitHub releases
+
+### Supported Languages
+
+| Language | Code |
+|----------|------|
+| English | en |
+| Simplified Chinese (简体中文) | zh-CN |
+| Traditional Chinese (繁體中文) | zh-TW |
+| Spanish (Español) | es |
+| German (Deutsch) | de |
+| French (Français) | fr |
+| Japanese (日本語) | ja |
+
+The application automatically detects your Windows display language. You can also manually select a language in Settings.
 
 ## Download
 
@@ -50,9 +66,12 @@ resources/
 ### Context Menu
 
 - **Mode: [current mode]** - Shows current audio mode
-- **Bluetooth Devices** - Lists detected Bluetooth audio devices
+- **[Device Name]** - Submenu for each Bluetooth device with:
+  - **Force Stereo** - Disable HFP service to keep device in stereo mode
+  - **Allow Hands Free** - Re-enable HFP service
+  - **Reconnect** - Reconnect the Bluetooth device
 - **Apps Using HFP** - Shows apps outputting to BT headset (only visible in HFP mode)
-- **Settings** - Open settings window
+- **Settings** - Open settings window (includes language selection)
 - **Check for Updates** - Check for new versions
 - **About** - Show version and credits
 - **Exit** - Close the application
@@ -99,6 +118,7 @@ Configuration is stored in `%LOCALAPPDATA%\BtAudioModeManager\config.toml`.
 
 | Setting | Description | Default |
 |---------|-------------|---------|
+| language | UI language (null = system default) | null |
 | auto_start | Start with Windows | false |
 | notify_mode_change | Notify on mode changes | true |
 | notify_mic_usage | Notify when apps use mic | true |

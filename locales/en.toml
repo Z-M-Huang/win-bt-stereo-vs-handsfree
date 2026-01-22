@@ -1,0 +1,73 @@
+# English translations
+
+# Menu Items
+menu_force_stereo = "Force Stereo"
+menu_allow_hands_free = "Allow Hands Free"
+menu_reconnect = "Reconnect"
+menu_settings = "Settings..."
+menu_check_updates = "Check for Updates"
+menu_exit = "Exit"
+menu_terminate_app = "Terminate App"
+menu_mode = "Mode: %{mode}"
+menu_apps_using_hfp = "Apps Using HFP (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "Stereo"
+mode_hands_free = "Hands-Free"
+mode_unknown = "Unknown"
+
+# Notifications - Titles
+notify_audio_mode_changed = "Audio Mode Changed"
+notify_mic_in_use = "Microphone In Use"
+notify_mic_released = "Microphone Released"
+notify_update_available = "Update Available"
+notify_stereo_mode = "Stereo Mode"
+notify_hands_free_enabled = "Hands-Free Enabled"
+notify_reconnecting = "Reconnecting..."
+notify_already_reconnecting = "Already Reconnecting"
+notify_reconnected = "Reconnected"
+notify_up_to_date = "Up to Date"
+notify_update_check_failed = "Update Check Failed"
+notify_error = "Error"
+notify_warning = "Warning"
+notify_notice = "Notice"
+
+# Notifications - Messages
+msg_mode_switched = "Switched from %{old} to %{new}"
+msg_mic_started = "%{app} started using the microphone"
+msg_mic_stopped = "%{app} stopped using the microphone"
+msg_update_available = "Version %{version} is available. Check menu to update."
+msg_device_stereo = "%{device} switched to stereo mode"
+msg_device_hands_free = "%{device} hands-free mode enabled"
+msg_device_reconnecting = "Reconnecting %{device}"
+msg_device_already_reconnecting = "%{device} is already reconnecting"
+msg_device_reconnected = "Successfully reconnected %{device}"
+msg_reconnect_failed = "Failed to reconnect %{device}: %{error}"
+msg_stereo_failed = "Failed to switch to stereo: %{error}"
+msg_hands_free_failed = "Failed to enable hands-free: %{error}"
+msg_latest_version = "You are running the latest version (%{version})"
+msg_update_check_error = "Could not check for updates: %{error}"
+msg_terminate_failed = "Could not terminate process: %{error}"
+msg_already_running = "Another instance is already running"
+
+# Settings Window
+settings_title = "Settings"
+settings_language = "Language:"
+settings_language_system = "System Default"
+settings_startup = "Launch at Windows startup"
+settings_notifications_group = "Show notifications for:"
+settings_notify_mode_changes = "Audio mode changes"
+settings_notify_mic_usage = "Microphone usage"
+settings_notify_errors = "Errors and warnings"
+settings_auto_updates = "Check for updates automatically"
+settings_cancel = "Cancel"
+settings_save = "Save"
+
+# About Dialog
+about_title = "About"
+about_app_name = "Bluetooth Audio Mode Manager"
+about_version = "Version: %{version}"
+about_description = "Manage your Bluetooth headphone audio modes."
+about_author = "Created by Mark.Huang (Z-M-Huang)"
+about_license = "MIT License with attribution requirement"

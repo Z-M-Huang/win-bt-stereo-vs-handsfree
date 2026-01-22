@@ -201,30 +201,30 @@ impl NotificationManager {
         match &notification {
             NotificationType::ModeChange { old, new } => {
                 if self.notify_mode_change {
-                    let title = "Audio Mode Changed";
-                    let message = format!("Switched from {} to {}", old, new);
-                    self.show_notification(title, &message, ToastIcon::Info)?;
+                    let title = rust_i18n::t!("notify_audio_mode_changed");
+                    let message = rust_i18n::t!("msg_mode_switched", old = old.display_localized(), new = new.display_localized());
+                    self.show_notification(&title, &message, ToastIcon::Info)?;
                 }
             }
             NotificationType::MicUsageStart { app_name } => {
                 if self.notify_mic_usage {
-                    let title = "Microphone In Use";
-                    let message = format!("{} started using the microphone", app_name);
-                    self.show_notification(title, &message, ToastIcon::Info)?;
+                    let title = rust_i18n::t!("notify_mic_in_use");
+                    let message = rust_i18n::t!("msg_mic_started", app = app_name);
+                    self.show_notification(&title, &message, ToastIcon::Info)?;
                 }
             }
             NotificationType::MicUsageStop { app_name } => {
                 if self.notify_mic_usage {
-                    let title = "Microphone Released";
-                    let message = format!("{} stopped using the microphone", app_name);
-                    self.show_notification(title, &message, ToastIcon::Info)?;
+                    let title = rust_i18n::t!("notify_mic_released");
+                    let message = rust_i18n::t!("msg_mic_stopped", app = app_name);
+                    self.show_notification(&title, &message, ToastIcon::Info)?;
                 }
             }
             NotificationType::UpdateAvailable { version } => {
                 if self.notify_updates {
-                    let title = "Update Available";
-                    let message = format!("Version {} is available. Check menu to update.", version);
-                    self.show_notification(title, &message, ToastIcon::Info)?;
+                    let title = rust_i18n::t!("notify_update_available");
+                    let message = rust_i18n::t!("msg_update_available", version = version);
+                    self.show_notification(&title, &message, ToastIcon::Info)?;
                 }
             }
             NotificationType::Error { message, severity } => {
@@ -235,11 +235,11 @@ impl NotificationManager {
                         ErrorSeverity::Minor => return Ok(()), // Don't show toast for minor
                     };
                     let title = match severity {
-                        ErrorSeverity::Fatal => "Error",
-                        ErrorSeverity::Recoverable => "Warning",
-                        ErrorSeverity::Minor => "Notice",
+                        ErrorSeverity::Fatal => rust_i18n::t!("notify_error"),
+                        ErrorSeverity::Recoverable => rust_i18n::t!("notify_warning"),
+                        ErrorSeverity::Minor => rust_i18n::t!("notify_notice"),
                     };
-                    self.show_notification(title, message, icon)?;
+                    self.show_notification(&title, message, icon)?;
                 }
             }
             NotificationType::Info { title, message } => {

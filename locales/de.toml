@@ -1,0 +1,73 @@
+# German translations (Deutsch)
+
+# Menu Items
+menu_force_stereo = "Stereo Erzwingen"
+menu_allow_hands_free = "Freisprechen Erlauben"
+menu_reconnect = "Neu Verbinden"
+menu_settings = "Einstellungen..."
+menu_check_updates = "Nach Updates Suchen"
+menu_exit = "Beenden"
+menu_terminate_app = "App Beenden"
+menu_mode = "Modus: %{mode}"
+menu_apps_using_hfp = "Apps mit HFP (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "Stereo"
+mode_hands_free = "Freisprechen"
+mode_unknown = "Unbekannt"
+
+# Notifications - Titles
+notify_audio_mode_changed = "Audiomodus Geändert"
+notify_mic_in_use = "Mikrofon in Gebrauch"
+notify_mic_released = "Mikrofon Freigegeben"
+notify_update_available = "Update Verfügbar"
+notify_stereo_mode = "Stereo-Modus"
+notify_hands_free_enabled = "Freisprechen Aktiviert"
+notify_reconnecting = "Verbindung wird Wiederhergestellt..."
+notify_already_reconnecting = "Bereits am Verbinden"
+notify_reconnected = "Neu Verbunden"
+notify_up_to_date = "Aktuell"
+notify_update_check_failed = "Update-Prüfung Fehlgeschlagen"
+notify_error = "Fehler"
+notify_warning = "Warnung"
+notify_notice = "Hinweis"
+
+# Notifications - Messages
+msg_mode_switched = "Von %{old} zu %{new} gewechselt"
+msg_mic_started = "%{app} hat das Mikrofon gestartet"
+msg_mic_stopped = "%{app} hat das Mikrofon gestoppt"
+msg_update_available = "Version %{version} ist verfügbar. Menü für Update prüfen."
+msg_device_stereo = "%{device} zu Stereo-Modus gewechselt"
+msg_device_hands_free = "%{device} Freisprechen aktiviert"
+msg_device_reconnecting = "%{device} wird neu verbunden"
+msg_device_already_reconnecting = "%{device} wird bereits neu verbunden"
+msg_device_reconnected = "%{device} erfolgreich neu verbunden"
+msg_reconnect_failed = "Verbindung zu %{device} fehlgeschlagen: %{error}"
+msg_stereo_failed = "Wechsel zu Stereo fehlgeschlagen: %{error}"
+msg_hands_free_failed = "Aktivierung von Freisprechen fehlgeschlagen: %{error}"
+msg_latest_version = "Sie verwenden die neueste Version (%{version})"
+msg_update_check_error = "Updates konnten nicht geprüft werden: %{error}"
+msg_terminate_failed = "Prozess konnte nicht beendet werden: %{error}"
+msg_already_running = "Eine andere Instanz läuft bereits"
+
+# Settings Window
+settings_title = "Einstellungen"
+settings_language = "Sprache:"
+settings_language_system = "Systemstandard"
+settings_startup = "Mit Windows starten"
+settings_notifications_group = "Benachrichtigungen anzeigen für:"
+settings_notify_mode_changes = "Audiomodus-Änderungen"
+settings_notify_mic_usage = "Mikrofonnutzung"
+settings_notify_errors = "Fehler und Warnungen"
+settings_auto_updates = "Automatisch nach Updates suchen"
+settings_cancel = "Abbrechen"
+settings_save = "Speichern"
+
+# About Dialog
+about_title = "Über"
+about_app_name = "Bluetooth-Audiomodus-Manager"
+about_version = "Version: %{version}"
+about_description = "Verwalten Sie die Audiomodi Ihrer Bluetooth-Kopfhörer."
+about_author = "Erstellt von Mark.Huang (Z-M-Huang)"
+about_license = "MIT-Lizenz mit Namensnennung"

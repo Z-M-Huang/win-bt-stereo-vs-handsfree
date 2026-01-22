@@ -108,7 +108,7 @@ fn show_settings_window(
 
     // Window dimensions
     let win_width = 360;
-    let win_height = 320;
+    let win_height = 300;
     let margin = 16;
     let group_width = win_width - (margin * 2);
 
@@ -117,11 +117,12 @@ fn show_settings_window(
     let icon_loaded = load_window_icon(&mut icon);
 
     // Create window - centered, non-resizable
+    let window_title = rust_i18n::t!("settings_title").to_string();
     let mut window = nwg::Window::default();
     let mut builder = nwg::Window::builder()
         .size((win_width, win_height))
         .center(true)
-        .title("Settings")
+        .title(&window_title)
         .flags(nwg::WindowFlags::WINDOW | nwg::WindowFlags::VISIBLE);
 
     if icon_loaded {
@@ -131,20 +132,54 @@ fn show_settings_window(
     builder.build(&mut window)
         .map_err(|e| AppError::ConfigError(format!("Window build failed: {}", e)))?;
 
-    // === Startup Group ===
-    let mut startup_frame = nwg::Frame::default();
-    nwg::Frame::builder()
-        .parent(&window)
-        .position((margin, 8))
-        .size((group_width, 50))
-        .build(&mut startup_frame)
-        .map_err(|e| AppError::ConfigError(format!("Frame build failed: {}", e)))?;
+    // Pre-allocate all translated strings to avoid lifetime issues
+    let lang_label_text = rust_i18n::t!("settings_language").to_string();
+    let startup_text = rust_i18n::t!("settings_startup").to_string();
+    let notify_group_text = rust_i18n::t!("settings_notifications_group").to_string();
+    let notify_mode_text = rust_i18n::t!("settings_notify_mode_changes").to_string();
+    let notify_mic_text = rust_i18n::t!("settings_notify_mic_usage").to_string();
+    let notify_errors_text = rust_i18n::t!("settings_notify_errors").to_string();
+    let auto_updates_text = rust_i18n::t!("settings_auto_updates").to_string();
+    let cancel_text = rust_i18n::t!("settings_cancel").to_string();
+    let save_text = rust_i18n::t!("settings_save").to_string();
 
+    // === Language Row ===
+    let mut lang_label = nwg::Label::default();
+    nwg::Label::builder()
+        .text(&lang_label_text)
+        .position((margin, 16))
+        .size((80, 20))
+        .parent(&window)
+        .build(&mut lang_label)
+        .map_err(|e| AppError::ConfigError(format!("Label build failed: {}", e)))?;
+
+    // Build language list
+    let language_names = crate::i18n::get_language_display_names();
+    let lang_items: Vec<String> = language_names.iter().map(|(_, name)| name.to_string()).collect();
+
+    // Determine selected index based on config
+    let selected_lang_index = if let Some(ref lang) = config.general.language {
+        language_names.iter().position(|(code, _)| code == lang).unwrap_or(0)
+    } else {
+        0 // "System Default"
+    };
+
+    let mut lang_combo = nwg::ComboBox::default();
+    nwg::ComboBox::builder()
+        .position((margin + 85, 14))
+        .size((group_width - 90, 25))
+        .parent(&window)
+        .collection(lang_items)
+        .selected_index(Some(selected_lang_index))
+        .build(&mut lang_combo)
+        .map_err(|e| AppError::ConfigError(format!("ComboBox build failed: {}", e)))?;
+
+    // === Startup Checkbox ===
     let mut auto_start_check = nwg::CheckBox::default();
     nwg::CheckBox::builder()
-        .text("Launch at Windows startup")
-        .position((margin + 8, 22))
-        .size((group_width - 20, 24))
+        .text(&startup_text)
+        .position((margin, 50))
+        .size((group_width, 24))
         .parent(&window)
         .check_state(if is_auto_start {
             nwg::CheckBoxState::Checked
@@ -155,19 +190,10 @@ fn show_settings_window(
         .map_err(|e| AppError::ConfigError(format!("Checkbox build failed: {}", e)))?;
 
     // === Notifications Group ===
-    let notify_y = 68;
-    let mut notify_frame = nwg::Frame::default();
-    nwg::Frame::builder()
-        .parent(&window)
-        .position((margin, notify_y))
-        .size((group_width, 120))
-        .build(&mut notify_frame)
-        .map_err(|e| AppError::ConfigError(format!("Frame build failed: {}", e)))?;
-
     let mut notify_label = nwg::Label::default();
     nwg::Label::builder()
-        .text("Show notifications for:")
-        .position((margin + 8, notify_y + 8))
+        .text(&notify_group_text)
+        .position((margin, 84))
         .size((200, 20))
         .parent(&window)
         .build(&mut notify_label)
@@ -175,9 +201,9 @@ fn show_settings_window(
 
     let mut notify_mode_check = nwg::CheckBox::default();
     nwg::CheckBox::builder()
-        .text("Audio mode changes")
-        .position((margin + 20, notify_y + 34))
-        .size((group_width - 40, 24))
+        .text(&notify_mode_text)
+        .position((margin + 12, 108))
+        .size((group_width - 20, 24))
         .parent(&window)
         .check_state(if config.notifications.notify_mode_change {
             nwg::CheckBoxState::Checked
@@ -189,9 +215,9 @@ fn show_settings_window(
 
     let mut notify_mic_check = nwg::CheckBox::default();
     nwg::CheckBox::builder()
-        .text("Microphone usage")
-        .position((margin + 20, notify_y + 60))
-        .size((group_width - 40, 24))
+        .text(&notify_mic_text)
+        .position((margin + 12, 132))
+        .size((group_width - 20, 24))
         .parent(&window)
         .check_state(if config.notifications.notify_mic_usage {
             nwg::CheckBoxState::Checked
@@ -203,9 +229,9 @@ fn show_settings_window(
 
     let mut notify_errors_check = nwg::CheckBox::default();
     nwg::CheckBox::builder()
-        .text("Errors and warnings")
-        .position((margin + 20, notify_y + 86))
-        .size((group_width - 40, 24))
+        .text(&notify_errors_text)
+        .position((margin + 12, 156))
+        .size((group_width - 20, 24))
         .parent(&window)
         .check_state(if config.notifications.notify_errors {
             nwg::CheckBoxState::Checked
@@ -215,21 +241,12 @@ fn show_settings_window(
         .build(&mut notify_errors_check)
         .map_err(|e| AppError::ConfigError(format!("Checkbox build failed: {}", e)))?;
 
-    // === Updates Group ===
-    let update_y = 198;
-    let mut update_frame = nwg::Frame::default();
-    nwg::Frame::builder()
-        .parent(&window)
-        .position((margin, update_y))
-        .size((group_width, 50))
-        .build(&mut update_frame)
-        .map_err(|e| AppError::ConfigError(format!("Frame build failed: {}", e)))?;
-
+    // === Updates Checkbox ===
     let mut update_check = nwg::CheckBox::default();
     nwg::CheckBox::builder()
-        .text("Check for updates automatically")
-        .position((margin + 8, update_y + 14))
-        .size((group_width - 20, 24))
+        .text(&auto_updates_text)
+        .position((margin, 196))
+        .size((group_width, 24))
         .parent(&window)
         .check_state(if config.updates.auto_check {
             nwg::CheckBoxState::Checked
@@ -249,7 +266,7 @@ fn show_settings_window(
 
     let mut cancel_button = nwg::Button::default();
     nwg::Button::builder()
-        .text("Cancel")
+        .text(&cancel_text)
         .position((win_width - margin - btn_width, footer_y + 8))
         .size((btn_width, btn_height))
         .parent(&window)
@@ -258,7 +275,7 @@ fn show_settings_window(
 
     let mut save_button = nwg::Button::default();
     nwg::Button::builder()
-        .text("Save")
+        .text(&save_text)
         .position((win_width - margin - btn_width * 2 - btn_spacing, footer_y + 8))
         .size((btn_width, btn_height))
         .parent(&window)
@@ -278,6 +295,15 @@ fn show_settings_window(
             nwg::Event::OnButtonClick => {
                 if handle == save_handle {
                     let mut new_config = config.clone();
+
+                    // Capture language selection
+                    let selected_index = lang_combo.selection().unwrap_or(0);
+                    new_config.general.language = if selected_index == 0 {
+                        None // "System Default"
+                    } else {
+                        language_names.get(selected_index).map(|(code, _)| code.to_string())
+                    };
+
                     new_config.general.auto_start =
                         auto_start_check.check_state() == nwg::CheckBoxState::Checked;
                     new_config.notifications.notify_mode_change =

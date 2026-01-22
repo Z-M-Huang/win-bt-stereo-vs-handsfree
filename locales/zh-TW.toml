@@ -1,0 +1,73 @@
+# Traditional Chinese translations (繁體中文)
+
+# Menu Items
+menu_force_stereo = "強制立體聲"
+menu_allow_hands_free = "允許免持聽筒"
+menu_reconnect = "重新連接"
+menu_settings = "設定..."
+menu_check_updates = "檢查更新"
+menu_exit = "離開"
+menu_terminate_app = "終止應用程式"
+menu_mode = "模式: %{mode}"
+menu_apps_using_hfp = "正在使用免持聽筒的應用程式 (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "立體聲"
+mode_hands_free = "免持聽筒"
+mode_unknown = "未知"
+
+# Notifications - Titles
+notify_audio_mode_changed = "音訊模式已變更"
+notify_mic_in_use = "麥克風使用中"
+notify_mic_released = "麥克風已釋放"
+notify_update_available = "有可用更新"
+notify_stereo_mode = "立體聲模式"
+notify_hands_free_enabled = "免持聽筒模式已啟用"
+notify_reconnecting = "正在重新連接..."
+notify_already_reconnecting = "正在重新連接中"
+notify_reconnected = "已重新連接"
+notify_up_to_date = "已是最新版本"
+notify_update_check_failed = "檢查更新失敗"
+notify_error = "錯誤"
+notify_warning = "警告"
+notify_notice = "提示"
+
+# Notifications - Messages
+msg_mode_switched = "已從 %{old} 切換到 %{new}"
+msg_mic_started = "%{app} 開始使用麥克風"
+msg_mic_stopped = "%{app} 停止使用麥克風"
+msg_update_available = "版本 %{version} 可用。查看選單以更新。"
+msg_device_stereo = "%{device} 已切換到立體聲模式"
+msg_device_hands_free = "%{device} 免持聽筒模式已啟用"
+msg_device_reconnecting = "正在重新連接 %{device}"
+msg_device_already_reconnecting = "%{device} 正在重新連接中"
+msg_device_reconnected = "成功重新連接 %{device}"
+msg_reconnect_failed = "重新連接 %{device} 失敗: %{error}"
+msg_stereo_failed = "切換到立體聲失敗: %{error}"
+msg_hands_free_failed = "啟用免持聽筒失敗: %{error}"
+msg_latest_version = "您正在執行最新版本 (%{version})"
+msg_update_check_error = "無法檢查更新: %{error}"
+msg_terminate_failed = "無法終止處理程序: %{error}"
+msg_already_running = "另一個執行個體已在執行"
+
+# Settings Window
+settings_title = "設定"
+settings_language = "語言:"
+settings_language_system = "跟隨系統"
+settings_startup = "開機自動啟動"
+settings_notifications_group = "顯示通知:"
+settings_notify_mode_changes = "音訊模式變更"
+settings_notify_mic_usage = "麥克風使用"
+settings_notify_errors = "錯誤和警告"
+settings_auto_updates = "自動檢查更新"
+settings_cancel = "取消"
+settings_save = "儲存"
+
+# About Dialog
+about_title = "關於"
+about_app_name = "藍牙音訊模式管理器"
+about_version = "版本: %{version}"
+about_description = "管理您的藍牙耳機音訊模式。"
+about_author = "作者: Mark.Huang (Z-M-Huang)"
+about_license = "MIT授權條款 (需註明出處)"

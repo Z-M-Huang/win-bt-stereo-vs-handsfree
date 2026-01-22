@@ -7,7 +7,7 @@ use std::fs;
 use std::path::PathBuf;
 
 /// Current configuration version
-pub const CONFIG_VERSION: u32 = 1;
+pub const CONFIG_VERSION: u32 = 2;
 
 /// Portable mode marker filename
 const PORTABLE_MARKER: &str = "portable.txt";
@@ -60,6 +60,10 @@ pub struct GeneralConfig {
     /// Polling interval in milliseconds
     #[serde(default = "default_poll_interval")]
     pub poll_interval_ms: u32,
+
+    /// Language override (None = use system locale, Some = use specified locale)
+    #[serde(default)]
+    pub language: Option<String>,
 }
 
 fn default_true() -> bool {
@@ -77,6 +81,7 @@ impl Default for GeneralConfig {
             start_minimized: true,
             prefer_stereo: false,
             poll_interval_ms: 500,
+            language: None,
         }
     }
 }
@@ -204,11 +209,12 @@ impl AppConfig {
             );
 
             // Add migration logic here as versions are added
-            // Example:
-            // if self.config_version < 2 {
-            //     // Migrate from v1 to v2
-            //     self.new_field = default_value();
-            // }
+            // v1 to v2: Added language field to GeneralConfig
+            // Old configs without language field will default to None (system locale)
+            if self.config_version < 2 {
+                // language field defaults to None via serde, no action needed
+                info!("Migrated config from v1 to v2: added language field");
+            }
 
             self.config_version = CONFIG_VERSION;
         }

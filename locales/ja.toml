@@ -1,0 +1,73 @@
+# Japanese translations (日本語)
+
+# Menu Items
+menu_force_stereo = "ステレオを強制"
+menu_allow_hands_free = "ハンズフリーを許可"
+menu_reconnect = "再接続"
+menu_settings = "設定..."
+menu_check_updates = "更新を確認"
+menu_exit = "終了"
+menu_terminate_app = "アプリを終了"
+menu_mode = "モード: %{mode}"
+menu_apps_using_hfp = "HFPを使用中のアプリ (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "ステレオ"
+mode_hands_free = "ハンズフリー"
+mode_unknown = "不明"
+
+# Notifications - Titles
+notify_audio_mode_changed = "オーディオモードが変更されました"
+notify_mic_in_use = "マイク使用中"
+notify_mic_released = "マイク解放"
+notify_update_available = "更新が利用可能です"
+notify_stereo_mode = "ステレオモード"
+notify_hands_free_enabled = "ハンズフリーが有効"
+notify_reconnecting = "再接続中..."
+notify_already_reconnecting = "既に再接続中"
+notify_reconnected = "再接続完了"
+notify_up_to_date = "最新版"
+notify_update_check_failed = "更新確認失敗"
+notify_error = "エラー"
+notify_warning = "警告"
+notify_notice = "通知"
+
+# Notifications - Messages
+msg_mode_switched = "%{old}から%{new}に切り替えました"
+msg_mic_started = "%{app}がマイクの使用を開始しました"
+msg_mic_stopped = "%{app}がマイクの使用を停止しました"
+msg_update_available = "バージョン%{version}が利用可能です。メニューから更新してください。"
+msg_device_stereo = "%{device}がステレオモードに切り替わりました"
+msg_device_hands_free = "%{device}のハンズフリーモードが有効になりました"
+msg_device_reconnecting = "%{device}を再接続中"
+msg_device_already_reconnecting = "%{device}は既に再接続中です"
+msg_device_reconnected = "%{device}の再接続に成功しました"
+msg_reconnect_failed = "%{device}の再接続に失敗しました: %{error}"
+msg_stereo_failed = "ステレオへの切り替えに失敗しました: %{error}"
+msg_hands_free_failed = "ハンズフリーの有効化に失敗しました: %{error}"
+msg_latest_version = "最新版を実行中です (%{version})"
+msg_update_check_error = "更新を確認できませんでした: %{error}"
+msg_terminate_failed = "プロセスを終了できませんでした: %{error}"
+msg_already_running = "別のインスタンスが既に実行中です"
+
+# Settings Window
+settings_title = "設定"
+settings_language = "言語:"
+settings_language_system = "システムのデフォルト"
+settings_startup = "Windowsの起動時に起動"
+settings_notifications_group = "通知を表示:"
+settings_notify_mode_changes = "オーディオモードの変更"
+settings_notify_mic_usage = "マイクの使用"
+settings_notify_errors = "エラーと警告"
+settings_auto_updates = "自動的に更新を確認"
+settings_cancel = "キャンセル"
+settings_save = "保存"
+
+# About Dialog
+about_title = "について"
+about_app_name = "Bluetoothオーディオモードマネージャー"
+about_version = "バージョン: %{version}"
+about_description = "Bluetoothヘッドホンのオーディオモードを管理します。"
+about_author = "作成者: Mark.Huang (Z-M-Huang)"
+about_license = "MITライセンス（帰属表示が必要）"

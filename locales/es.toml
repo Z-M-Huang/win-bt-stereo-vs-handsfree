@@ -1,0 +1,73 @@
+# Spanish translations (Español)
+
+# Menu Items
+menu_force_stereo = "Forzar Estéreo"
+menu_allow_hands_free = "Permitir Manos Libres"
+menu_reconnect = "Reconectar"
+menu_settings = "Configuración..."
+menu_check_updates = "Buscar Actualizaciones"
+menu_exit = "Salir"
+menu_terminate_app = "Terminar Aplicación"
+menu_mode = "Modo: %{mode}"
+menu_apps_using_hfp = "Aplicaciones Usando HFP (%{count})"
+menu_pid_info = "PID: %{pid} - %{name}"
+
+# Audio Modes
+mode_stereo = "Estéreo"
+mode_hands_free = "Manos Libres"
+mode_unknown = "Desconocido"
+
+# Notifications - Titles
+notify_audio_mode_changed = "Modo de Audio Cambiado"
+notify_mic_in_use = "Micrófono en Uso"
+notify_mic_released = "Micrófono Liberado"
+notify_update_available = "Actualización Disponible"
+notify_stereo_mode = "Modo Estéreo"
+notify_hands_free_enabled = "Manos Libres Activado"
+notify_reconnecting = "Reconectando..."
+notify_already_reconnecting = "Ya Reconectando"
+notify_reconnected = "Reconectado"
+notify_up_to_date = "Actualizado"
+notify_update_check_failed = "Falló la Comprobación de Actualizaciones"
+notify_error = "Error"
+notify_warning = "Advertencia"
+notify_notice = "Aviso"
+
+# Notifications - Messages
+msg_mode_switched = "Cambiado de %{old} a %{new}"
+msg_mic_started = "%{app} comenzó a usar el micrófono"
+msg_mic_stopped = "%{app} dejó de usar el micrófono"
+msg_update_available = "La versión %{version} está disponible. Consulte el menú para actualizar."
+msg_device_stereo = "%{device} cambió al modo estéreo"
+msg_device_hands_free = "%{device} modo manos libres activado"
+msg_device_reconnecting = "Reconectando %{device}"
+msg_device_already_reconnecting = "%{device} ya se está reconectando"
+msg_device_reconnected = "Reconectado exitosamente %{device}"
+msg_reconnect_failed = "Error al reconectar %{device}: %{error}"
+msg_stereo_failed = "Error al cambiar a estéreo: %{error}"
+msg_hands_free_failed = "Error al activar manos libres: %{error}"
+msg_latest_version = "Está ejecutando la última versión (%{version})"
+msg_update_check_error = "No se pudo buscar actualizaciones: %{error}"
+msg_terminate_failed = "No se pudo terminar el proceso: %{error}"
+msg_already_running = "Ya se está ejecutando otra instancia"
+
+# Settings Window
+settings_title = "Configuración"
+settings_language = "Idioma:"
+settings_language_system = "Predeterminado del Sistema"
+settings_startup = "Iniciar con Windows"
+settings_notifications_group = "Mostrar notificaciones para:"
+settings_notify_mode_changes = "Cambios de modo de audio"
+settings_notify_mic_usage = "Uso del micrófono"
+settings_notify_errors = "Errores y advertencias"
+settings_auto_updates = "Buscar actualizaciones automáticamente"
+settings_cancel = "Cancelar"
+settings_save = "Guardar"
+
+# About Dialog
+about_title = "Acerca de"
+about_app_name = "Administrador de Modo de Audio Bluetooth"
+about_version = "Versión: %{version}"
+about_description = "Administre los modos de audio de sus auriculares Bluetooth."
+about_author = "Creado por Mark.Huang (Z-M-Huang)"
+about_license = "Licencia MIT con requisito de atribución"
